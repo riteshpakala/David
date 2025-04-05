@@ -8,39 +8,46 @@
 import Foundation
 import Granite
 import SwiftUI
+import DavidKit
 
-struct Investment: GraniteModel, Identifiable, Hashable {
+public struct Investment: GraniteModel, Identifiable, Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
     
-    struct Change: GraniteModel, Identifiable, Hashable {
+    public struct Change: GraniteModel, Identifiable, Hashable {
         public func hash(into hasher: inout Hasher) {
             hasher.combine(id)
         }
         
-        var id: String {
+        public var id: String {
             stock.assetID + stock.date.asString
         }
         
-        let stock: Stock
-        let date: Date
-        let shares: Double
+        public let stock: Stock
+        public let date: Date
+        public let shares: Double
+        
+        public init(stock: Stock, date: Date, shares: Double) {
+            self.stock = stock
+            self.date = date
+            self.shares = shares
+        }
     }
     
-    var id: String {
+    public var id: String {
         stock.name+openedDate.asStringWithTime
     }
     
-    let stock: Stock
+    public let stock: Stock
 //    var shares: [Change]//technically full history
-    var soldShares: [Change]
-    var boughtShares: [Change]
+    public var soldShares: [Change]
+    public var boughtShares: [Change]
     
-    var openedDate: Date = .init()
-    var closedDate: Date? = nil
+    public var openedDate: Date = .init()
+    public var closedDate: Date? = nil
     
-    var isClosed: Bool = false
+    public var isClosed: Bool = false
     
 //    var initialAmount: Double {
 //        shares.first?.shares ?? 0
@@ -67,42 +74,42 @@ struct Investment: GraniteModel, Identifiable, Hashable {
 //    }
     
     //Use sold, because sale is final price
-    var currentValue: Double {
+    public var currentValue: Double {
         profitValue//totalSoldValue// + ownedValue
     }
 //
 //    var totalValue: Double {
 //        shares.map { $0.shares * $0.stock.lastValue }.reduce(0, +)
 //    }
-    var totalBoughtShares: Double {
+    public var totalBoughtShares: Double {
         boughtShares.map { $0.shares }.reduce(0, +)
     }
     
-    var totalBoughtValue: Double {
+    public var totalBoughtValue: Double {
         boughtShares.map { $0.shares * $0.stock.lastValue }.reduce(0, +)
     }
     
-    var totalSoldShares: Double {
+    public var totalSoldShares: Double {
         soldShares.map { $0.shares }.reduce(0, +)
     }
     
-    var totalSoldValue: Double {
+    public var totalSoldValue: Double {
         soldShares.map { $0.shares * $0.stock.lastValue }.reduce(0, +)
     }
     
-    var ownedShares: Double {
+    public var ownedShares: Double {
         totalBoughtShares - totalSoldShares
     }
     
-    var ownedValue: Double {
+    public var ownedValue: Double {
         totalBoughtValue - totalSoldValue
     }
     
-    var profitValue: Double {
+    public var profitValue: Double {
         totalSoldValue - totalBoughtValue
     }
     
-    var trades: Int {
+    public var trades: Int {
         boughtShares.count + soldShares.count
     }
     
@@ -125,7 +132,7 @@ struct Investment: GraniteModel, Identifiable, Hashable {
 //    }
     
     //TODO: something is wrong with this logic
-    var statusColor: Color {
+    public var statusColor: Color {
         if totalSoldValue > totalBoughtValue {//shares.last?.stock.lastValue ?? 0 >= stock.lastValue {
             return Brand.Colors.green
         } else if trades == 0 || profitValue == 0.0 {
@@ -135,7 +142,7 @@ struct Investment: GraniteModel, Identifiable, Hashable {
         }
     }
     
-    mutating func update(_ stocks: [Stock]) {
+    public mutating func update(_ stocks: [Stock]) {
 //        let newShares: [Change] = stocks.map {
 //            .init(stock: $0,
 //                  date: $0.date,
@@ -145,7 +152,7 @@ struct Investment: GraniteModel, Identifiable, Hashable {
 //        shares.append(contentsOf: newShares)
     }
     
-    mutating func close() {
+    public mutating func close() {
         isClosed = true
         self.closedDate = .init()
     }

@@ -8,6 +8,7 @@
 import Foundation
 import Granite
 import SwiftUI
+import DavidKit
 
 public struct ModuleConfig: GraniteModel {
     public var id: String {

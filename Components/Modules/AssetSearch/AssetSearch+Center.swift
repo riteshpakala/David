@@ -1,5 +1,6 @@
 import Granite
 import SwiftUI
+import DavidKit
 
 extension AssetSearch {
     struct Center: GraniteCenter {

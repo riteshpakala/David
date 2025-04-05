@@ -1,5 +1,6 @@
 import Granite
 import SwiftUI
+import DavidKit
 
 struct AssetDetail: GraniteNavigationDestination {
     public enum Kind: String, GraniteModel {

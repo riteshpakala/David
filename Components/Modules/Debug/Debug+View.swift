@@ -1,5 +1,6 @@
 import Granite
 import SwiftUI
+import DavidKit
 
 extension Debug: View {
     public var view: some View {

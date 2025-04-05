@@ -1,5 +1,6 @@
 import Foundation
 import Granite
+import DavidKit
 
 extension AssetSearch {
     struct Search: GraniteReducer {
@@ -7,27 +8,18 @@ extension AssetSearch {
         
         @Event var response: GetSearchResponse.Reducer
         
-        @Relay var network: NetworkService
+        @Relay var service: StockService
         
-        func reduce(state: inout Center.State) {
-            network.request(Requests.Stock.Search(query: state.query))
-                    .sink { result in
-
-                        switch result {
-
-                        case .failure(let error):
-                            print("{TEST} \(error.localizedDescription)")
-                            break
-
-                        case .finished:
-                            break
-
-                        }
-
-                    } receiveValue: { result in
-                        response.send(GetSearchResponse.Meta(data: result))
-                    }
-                    .store(in: network.center.$state)
+        func reduce(state: inout Center.State) async {
+            guard let result = await service.search(state.query) else {
+                return
+            }
+            
+            response.send(GetSearchResponse.Meta(data: result))
+        }
+        
+        var behavior: GraniteReducerBehavior {
+            .task(.userInitiated)
         }
     }
     

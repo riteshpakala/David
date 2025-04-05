@@ -1,6 +1,7 @@
 import Granite
 import SwiftUI
 import GraniteUI
+import DavidKit
 
 extension AssetDetail {
     static var sheetId: String = "nyc.stoic.Bullish.AssetDetail"
